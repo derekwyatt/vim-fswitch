@@ -103,7 +103,7 @@ get that move on to |fswitch-configure|.
 	'fswitchlocs' variable.
 
 							*'fswitchlocs'*
-'fswitchlocs'	string	(default depends on filen in current buffer)
+'fswitchlocs'	string	(default depends on file in current buffer)
 		local to buffer
 
 	The 'fswitchlocs' variable contains a set of directives that indicate
@@ -208,6 +208,30 @@ get that move on to |fswitch-configure|.
 	The default locations are currently set to "./" or ".\" depending on
 	what slash your configuration evaluates to.
 
+							*'fswitchfnames'*
+'fswitchfnames'	string	(default depends on file in current buffer)
+		local to buffer
+
+	The 'fswitchfnames' variable contains a comma-separated list
+	of possible substitution patterns over the base filename (without path
+	and extension) that should be formulated when trying to find the
+	alternate file.  The format of the substitution pattern is the same
+	as |fswitch-reg|.
+
+	This may be useful when the companion file may can be formulated by
+	adding a suffix to the base filename. For instance, when the companion
+	of MyClass.java is MyClassTest.java.
+	
+	For example:
+>
+		" Create the destination filename by appending 'Test'
+		" to the filename
+		:let b:fswitchfnames = '/$/Test/'
+
+		" Create the destination filename by removing 'Test'
+		" from the end of the filename.
+		:let b:fswitchfnames = '/Test$//'
+<
 							*'fswitchnonewfiles'*
 'fsnonewfiles'
 		string	(default off)
