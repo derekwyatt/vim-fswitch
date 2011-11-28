@@ -534,6 +534,15 @@ path.
 							*fswitch-changes*
 A. Change History~
 
+0.9.4
+	- Added fixes from Alexey Radkov to handle the 'sb' and 'spr' option
+	  settings as well as the 'switchbuf' option.  See:
+	  https://github.com/derekwyatt/vim-fswitch/pull/2
+	- Made small fix to Alexey's fix to keep the 'sb' and 'spr' shadow
+	  variable local to the buffer and unlet them at the end.
+	- I made a quick regression check on this update but did not test
+	  Alexey's features directly - I trust that he did that :)
+
 0.9.3
 	- Made sure that there's a check for 7.0 (Thanks Timon Kelter)
 
