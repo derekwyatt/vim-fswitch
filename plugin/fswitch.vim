@@ -329,8 +329,8 @@ endfunction
 "
 augroup fswitch_au_group
     au!
-    au BufEnter *.h call s:SetVariables('cpp,c', 'reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|')
-    au BufEnter *.c,*.cpp call s:SetVariables('h', 'reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|')
+    au BufEnter *.h,*.H,*.hpp,*.hxx call s:SetVariables('cpp,cxx,C,c', 'reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|')
+    au BufEnter *.c,*.C,*.cpp,*.cxx call s:SetVariables('h,H,hpp,hxx', 'reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|')
 augroup END
 
 "
