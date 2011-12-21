@@ -388,13 +388,37 @@ In order to see what created the need for this function, see
 							*fswitch-defaults*
 11. The Default Settings~
 
-By default FSwitch handles {c} and {cpp} files, favouring {cpp}.
+By default FSwitch handles {c}, {cc}, {cpp}, {cxx} and {C}.  Note that the
+difference between {c} and {C} is only case sensitivity.  This may mean that
+weird stuff happens if your OS is case insensitive.
+
+Also NOTE that when you use {cxx/hxx} or {C/H}, god kills a puppy.
+Consider that next time you want to do such a silly thing.
 
 For *.h files:
 >
-    let b:fswitchdst  = 'cpp,c'
+    let b:fswitchdst  = 'c,cpp'
     let b:fswitchlocs = 'reg:/include/src/,reg:/include.*/src/,../src'
 <
+
+For *.hpp files:
+>
+    let b:fswitchdst  = 'cpp'
+    let b:fswitchlocs = 'reg:/include/src/,reg:/include.*/src/,../src'
+<
+
+For *.hxx files:
+>
+    let b:fswitchdst  = 'cxx'
+    let b:fswitchlocs = 'reg:/include/src/,reg:/include.*/src/,../src'
+<
+
+For *.H files:
+>
+    let b:fswitchdst  = 'C'
+    let b:fswitchlocs = 'reg:/include/src/,reg:/include.*/src/,../src'
+<
+
 For *.c
 >
     let b:fswitchdst  = 'h'
@@ -403,7 +427,19 @@ For *.c
 
 For *.cpp
 >
-    let b:fswitchdst  = 'h'
+    let b:fswitchdst  = 'hpp,h'
+    let b:fswitchlocs = 'reg:/src/include/,reg:|src|include/**|,../include'
+<
+
+For *.cxx
+>
+    let b:fswitchdst  = 'hxx'
+    let b:fswitchlocs = 'reg:/src/include/,reg:|src|include/**|,../include'
+<
+
+For *.C
+>
+    let b:fswitchdst  = 'H'
     let b:fswitchlocs = 'reg:/src/include/,reg:|src|include/**|,../include'
 <
 
@@ -533,6 +569,11 @@ path.
 ==============================================================================
 							*fswitch-changes*
 A. Change History~
+
+0.9.5
+	- Modified the autocommands to handle the myriad different
+	  formulations of C++ files per Hong Xu's request. See:
+	  https://github.com/derekwyatt/vim-fswitch/pull/3
 
 0.9.4
 	- Added fixes from Alexey Radkov to handle the 'sb' and 'spr' option

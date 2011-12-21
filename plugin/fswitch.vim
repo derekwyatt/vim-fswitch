@@ -20,12 +20,12 @@ if exists("g:disable_fswitch")
 endif
 
 if v:version < 700
-  echoerr "FSwitch requires Vim 7.0 or higher!"
+  echoerr "FSwitch requires Vim 7.0 or higher."
   finish
 endif
 
 " Version
-let s:fswitch_version = '0.9.4'
+let s:fswitch_version = '0.9.5'
 
 " Get the path separator right
 let s:os_slash = &ssl == 0 && (has("win16") || has("win32") || has("win64")) ? '\' : '/'
@@ -329,8 +329,16 @@ endfunction
 "
 augroup fswitch_au_group
     au!
-    au BufEnter *.h call s:SetVariables('cpp,c', 'reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|')
-    au BufEnter *.c,*.cpp call s:SetVariables('h', 'reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|')
+    au BufEnter *.c    call s:SetVariables('h',     'reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|')
+    au BufEnter *.cc   call s:SetVariables('hh',    'reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|')
+    au BufEnter *.cpp  call s:SetVariables('hpp,h', 'reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|')
+    au BufEnter *.cxx  call s:SetVariables('hxx',   'reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|')
+    au BufEnter *.C    call s:SetVariables('H',     'reg:/src/include/,reg:|src|include/**|,ifrel:|/src/|../include|')
+    au BufEnter *.h    call s:SetVariables('c,cpp', 'reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|')
+    au BufEnter *.hh   call s:SetVariables('cc',    'reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|')
+    au BufEnter *.hpp  call s:SetVariables('cpp',   'reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|')
+    au BufEnter *.hxx  call s:SetVariables('cxx',   'reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|')
+    au BufEnter *.H    call s:SetVariables('C',     'reg:/include/src/,reg:/include.*/src/,ifrel:|/include/|../src|')
 augroup END
 
 "
