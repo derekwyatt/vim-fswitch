@@ -315,7 +315,14 @@ function! FSwitch(filename, precmd)
             if strlen(a:precmd) != 0
                 execute a:precmd
             endif
-            execute 'edit ' . fnameescape(newpath)
+            
+            let s:fname = fnameescape(newpath)
+
+            if (strlen(bufname(s:fname))) > 0
+                execute 'buffer ' . s:fname
+            else
+                execute 'edit ' . s:fname
+            endif
         else
             echoerr "Alternate has evaluated to nothing.  See :h fswitch-empty for more info."
         endif
