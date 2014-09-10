@@ -194,7 +194,7 @@ function! s:FSGetAlternateFilename(filepath, filename, newextension, location, m
                     if match(a:filepath, part1) == -1
                         let path = ""
                     else
-                        let path = a:filepath . s:os_slash . part2 . 
+                        let path = a:filepath . s:os_slash . part2 .
                                      \ s:os_slash . a:filename . '.' . a:newextension
                     endif
                 elseif cmd == 'ifabs'
@@ -258,7 +258,7 @@ endfunction
 " This function will return a path that is the best candidate for the companion
 " file to switch to, so long as that file actually exists on the filesystem and
 " is readable.
-" 
+"
 function! FSReturnReadableCompanionFilename(filename)
     return s:FSReturnCompanionFilename(a:filename, 1)
 endfunction
@@ -358,4 +358,5 @@ com! FSAbove      :call FSwitch('%', 'wincmd k')
 com! FSSplitAbove :call FSwitch('%', 'let cursb=&sb | set nosb | split | if cursb | set sb | endif')
 com! FSBelow      :call FSwitch('%', 'wincmd j')
 com! FSSplitBelow :call FSwitch('%', 'let cursb=&sb | set nosb | split | wincmd j | if cursb | set sb | endif')
+com! FSTab        :call FSwitch('%', 'tabedit')
 
