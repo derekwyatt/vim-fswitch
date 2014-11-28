@@ -316,7 +316,7 @@ function! FSwitch(filename, precmd)
                 execute a:precmd
             endif
             if bufexists(newpath)
-                execute 'buffer ' . fnameescape(newpath)
+                execute 'buffer ' . bufnr(newpath)
             else
                 execute 'edit ' . fnameescape(newpath)
             endif
