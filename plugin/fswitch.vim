@@ -282,7 +282,7 @@ endfunction
 "
 function! FSwitch(filename, precmd)
     if !exists("b:fswitchdst") || strlen(b:fswitchdst) == 0
-        throw 'b:fswitchdst not set - read :help fswitch'
+        doautocmd fswitch_au_group BufEnter
     endif
     if (!exists("b:fswitchlocs")   || strlen(b:fswitchlocs) == 0) &&
      \ (!exists("b:fsdisablegloc") || b:fsdisablegloc == 0)
