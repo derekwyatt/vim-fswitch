@@ -315,11 +315,7 @@ function! FSwitch(filename, precmd)
             if strlen(a:precmd) != 0
                 execute a:precmd
             endif
-            if bufexists(newpath)
-                execute 'buffer ' . fnameescape(newpath)
-            else
-                execute 'edit ' . fnameescape(newpath)
-            endif
+            execute 'edit ' . fnameescape(newpath)
         else
             echoerr "Alternate has evaluated to nothing.  See :h fswitch-empty for more info."
         endif
