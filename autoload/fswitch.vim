@@ -17,7 +17,15 @@
 if exists('g:autoloaded_fswitch') || &cp || version < 700
     finish
 endif
-let g:autoloaded_fswitch = 1
+
+" Version
+let s:fswitch_version = '0.9.6'
+
+" Get the path separator right
+let s:os_slash = &ssl == 0 && (has("win16") || has("win32") || has("win64")) ? '\' : '/'
+
+" Default locations - appended to buffer locations unless otherwise specified
+let s:fswitch_global_locs = '.' . s:os_slash
 
 "
 " s:FSGetLocations
@@ -313,3 +321,4 @@ function! fswitch#FSwitch(filename, precmd)
         echoerr "No alternate file found.  'fsnonewfiles' is set which denies creation."
     endif
 endfunction
+let g:autoloaded_fswitch = 1

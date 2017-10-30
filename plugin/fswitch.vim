@@ -17,16 +17,6 @@
 if exists('g:loaded_fswitch') || exists("g:disable_fswitch") || &cp || version < 700
     finish
 endif
-let g:loaded_fswitch = 1
-
-" Version
-let s:fswitch_version = '0.9.6'
-
-" Get the path separator right
-let s:os_slash = &ssl == 0 && (has("win16") || has("win32") || has("win64")) ? '\' : '/'
-
-" Default locations - appended to buffer locations unless otherwise specified
-let s:fswitch_global_locs = '.' . s:os_slash
 
 "
 " The autocmds we set up to set up the buffer variables for us.
@@ -58,3 +48,4 @@ com! FSAbove      :call fswitch#FSwitch('%', 'wincmd k')
 com! FSSplitAbove :call fswitch#FSwitch('%', 'let cursb=&sb | set nosb | split | if cursb | set sb | endif')
 com! FSBelow      :call fswitch#FSwitch('%', 'wincmd j')
 com! FSSplitBelow :call fswitch#FSwitch('%', 'let cursb=&sb | set nosb | split | wincmd j | if cursb | set sb | endif')
+let g:loaded_fswitch = 1
