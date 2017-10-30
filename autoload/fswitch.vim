@@ -20,24 +20,6 @@ endif
 let g:autoloaded_fswitch = 1
 
 "
-" s:SetVariables
-"
-" There are two variables that need to be set in the buffer in order for things
-" to work correctly.  Because we're using an autocmd to set things up we need to
-" be sure that the user hasn't already set them for us explicitly so we have
-" this function just to check and make sure.  If the user's autocmd runs after
-" ours then they will override the value anyway.
-"
-function! s:SetVariables(dst, locs)
-    if !exists("b:fswitchdst")
-        let b:fswitchdst = a:dst
-    endif
-    if !exists("b:fswitchlocs")
-        let b:fswitchlocs = a:locs
-    endif
-endfunction
-
-"
 " s:FSGetLocations
 "
 " Return the list of possible locations
@@ -181,7 +163,7 @@ function! s:FSGetAlternateFilename(filepath, filename, newextension, location, m
                         let path = ""
                     else
                         let path = a:filepath . s:os_slash . part2 .
-                                     \ s:os_slash . a:filename . '.' . a:newextension
+                                    \ s:os_slash . a:filename . '.' . a:newextension
                     endif
                 elseif cmd == 'ifabs'
                     if match(a:filepath, part1) == -1
@@ -263,10 +245,19 @@ endfunction
 "
 " FTInit
 "
-" Wrapper function to be used to set companions
+" There are two variables that need to be set in the buffer in order for things
+" to work correctly.  Because we're using an autocmd to set things up we need to
+" be sure that the user hasn't already set them for us explicitly so we have
+" this function just to check and make sure.  If the user's autocmd runs after
+" ours then they will override the value anyway.
 "
 function! fswitch#FTInit(dst, locs)
-    s:SetVariables(dst, locs)
+    if !exists("b:fswitchdst")
+        let b:fswitchdst = a:dst
+    endif
+    if !exists("b:fswitchlocs")
+        let b:fswitchlocs = a:locs
+    endif
 endfunction
 
 "
@@ -280,7 +271,7 @@ function! fswitch#FSwitch(filename, precmd)
         throw 'b:fswitchdst not set - read :help fswitch'
     endif
     if (!exists("b:fswitchlocs")   || strlen(b:fswitchlocs) == 0) &&
-     \ (!exists("b:fsdisablegloc") || b:fsdisablegloc == 0)
+                \ (!exists("b:fsdisablegloc") || b:fsdisablegloc == 0)
         throw "There are no locations defined (see :h fswitchlocs and :h fsdisablegloc)"
     endif
     let newpath = FSReturnReadableCompanionFilename(a:filename)
