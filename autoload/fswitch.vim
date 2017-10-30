@@ -265,7 +265,7 @@ endfunction
 "
 " Wrapper function to be used to set companions
 "
-function! FTInit(dst, locs)
+function! fswitch#FTInit(dst, locs)
     s:SetVariables(dst, locs)
 endfunction
 
@@ -275,7 +275,7 @@ endfunction
 " This is the only externally accessible function and is what we use to switch
 " to the alternate file.
 "
-function! FSwitch(filename, precmd)
+function! fswitch#FSwitch(filename, precmd)
     if !exists("b:fswitchdst") || strlen(b:fswitchdst) == 0
         throw 'b:fswitchdst not set - read :help fswitch'
     endif
