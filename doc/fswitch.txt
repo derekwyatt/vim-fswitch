@@ -1,7 +1,7 @@
 *fswitch.txt*	For Vim version 7.2 and above	Last change: 2009 Mar 23
 
 			       ---------------
- 			        File Switcher
+				File Switcher
 			       ---------------
 
 Author:  Derek Wyatt (derek at myfirstnamemylastname dot org)
@@ -131,27 +131,27 @@ get that move on to |fswitch-configure|.
 			{delim}{pat}{delim}{globsub}{delim}
 <
 		Where:
-		
+
 		{delim}   is something that doesn't appear in {pat} or
 			  {globsub} used to delimit the {pat} and {globsub}
 
 		{pat}	  is a standard pattern to search on
 
 		{globsub} is a substitution string that will be run through
-       		          the |glob()| function.
+			  the |glob()| function.
 
 							 *fswitch_rel*
 	rel:~
 		A relative path.  The {rel:} is actually optional.  If you
 		leave this off, then FSwitch will assume that the string is
 		denoting a relative path.
-	
+
 							 *fswitch_ifrel*
 	ifrel:~
 		Takes the same form as {:reg} but the {globsub} part of the
 		directive is a relative path.  The relative path is only used
 		if the {pat} matches the existing path of the buffer.
-	
+
 							 *fswitch_abs*
 	abs:~
 		An absolute path.  I have no idea why you'd ever want to do
@@ -162,7 +162,7 @@ get that move on to |fswitch-configure|.
 		Takes the same form as {:reg} but the {globsub} part of the
 		directive is an absolute path.  The absolute path is only used
 		if the {pat} matches the existing path of the buffer.
-	
+
 	Why use the "if" variants?
 
 	Here's the situation: You've got the following file:
@@ -199,7 +199,7 @@ get that move on to |fswitch-configure|.
 'fsdisablegloc'
 		string	(default off)
 		local to buffer
-	
+
 	Disables the appending of the default global locations to the local
 	buffer definition.  Normally when processing alternate file locations
 	FSwitch will append some default values to the list of locations.  If
@@ -221,7 +221,7 @@ get that move on to |fswitch-configure|.
 	This may be useful when the companion file may can be formulated by
 	adding a suffix to the base filename. For instance, when the companion
 	of MyClass.java is MyClassTest.java.
-	
+
 	For example:
 >
 		" Create the destination filename by appending 'Test'
@@ -236,7 +236,7 @@ get that move on to |fswitch-configure|.
 'fsnonewfiles'
 		string	(default off)
 		local to buffer and global
-	
+
 	This variable is both global and local.  If you want to disable the
 	creation of the alternate file when it doesn't already exist you can
 	choose to do this on a per-extension basis or globally.  Set the
@@ -247,7 +247,7 @@ get that move on to |fswitch-configure|.
 'fsneednomatch'
 		string	(default off)
 		local to buffer and global
-	
+
 	Normally when doing a regular expression alteration of the path (see
 	{reg:} in 'fswitchdst' the pattern you're going to substitute the
 	value with must actually match in the string.  When it doesn't matter
@@ -498,7 +498,7 @@ The fswitchlocs setting allows for the following:
 		possibility:
 
 		- Files are in {include/name/space} and {src} respectively
-	
+
 	./~
 		This one's a hiddden option.  The default location is the
 		current directory already so we don't explicitly have to state
@@ -570,6 +570,9 @@ path.
 							*fswitch-changes*
 A. Change History~
 
+0.9.6
+	- Added autoload support. Now most of the plugin code is lazy
+	  loaded.
 0.9.5
 	- Modified the autocommands to handle the myriad different
 	  formulations of C++ files per Hong Xu's request. See:
