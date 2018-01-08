@@ -282,7 +282,7 @@ endfunction
 "
 function! FSwitch(filename, precmd)
     if !exists("b:fswitchdst") || strlen(b:fswitchdst) == 0
-        throw 'b:fswitchdst not set - read :help fswitch'
+        doautocmd fswitch_au_group BufEnter
     endif
     if (!exists("b:fswitchlocs")   || strlen(b:fswitchlocs) == 0) &&
      \ (!exists("b:fsdisablegloc") || b:fsdisablegloc == 0)
@@ -315,12 +315,10 @@ function! FSwitch(filename, precmd)
             if strlen(a:precmd) != 0
                 execute a:precmd
             endif
-            let s:fname = fnameescape(newpath)
-
-            if (strlen(bufname(s:fname))) > 0
-                execute 'buffer ' . s:fname
+            if bufexists(newpath)
+                execute 'buffer ' . bufnr(newpath)
             else
-                execute 'edit ' . s:fname
+                execute 'edit ' . fnameescape(newpath)
             endif
         else
             echoerr "Alternate has evaluated to nothing.  See :h fswitch-empty for more info."
