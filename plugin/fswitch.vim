@@ -317,7 +317,7 @@ function! FSwitch(filename, precmd)
             endif
             let s:fname = fnameescape(newpath)
 
-            if (strlen(bufname(s:fname))) > 0
+            if (strlen(bufname("^" . s:fname . "$"))) > 0
                 execute 'buffer ' . s:fname
             else
                 execute 'edit ' . s:fname
