@@ -151,6 +151,28 @@ function! s:FSMutateFilename(filename, directive)
     endif
 endfunction
 
+function! s:FSGetAlternateFilenameList(filepath, src_str, tar_str)
+    let parts = split(a:filepath, a:src_str)
+    let paths = [] 
+
+    for tar_idx in range(0, len(parts) - 2)
+        let path = ""
+        for idx in range(0, len(parts) - 1) 
+            let path = path . parts[idx]
+            if idx == len(parts) - 1
+                break
+            endif
+            if idx == tar_idx
+                let path = path . a:tar_str 
+            else
+                let path = path . a:src_str 
+            endif
+        endfor
+        call add(paths, path)
+    endfor
+    return paths
+endfunction
+
 "
 " s:FSGetAlternateFilename
 "
@@ -164,6 +186,7 @@ function! s:FSGetAlternateFilename(filepath, filename, newextension, location, m
     let parts = split(a:location, ':')
     let cmd = 'rel'
     let directive = parts[0]
+    let paths = [] 
     if len(parts) == 2
         let cmd = parts[0]
         let directive = parts[1]
@@ -185,34 +208,50 @@ function! s:FSGetAlternateFilename(filepath, filename, newextension, location, m
                 endif
                 if cmd == 'reg'
                     if a:mustmatch == 1 && match(a:filepath, part1) == -1
-                        let path = ""
+                        "let path = ""
+                        paths = []
                     else
-                        let path = substitute(a:filepath, part1, part2, flags) . s:os_slash .
-                                    \ a:filename . '.' . a:newextension
+                        "let path = substitute(a:filepath, part1, part2, flags) . s:os_slash .
+                                    "\ a:filename . '.' . a:newextension
+                        for raw_path in s:FSGetAlternateFilenameList(a:filepath, part1, part2)
+                            call add(paths, raw_path . s:os_slash .
+                                    \ a:filename . '.' . a:newextension)
+                        endfor
                     endif
                 elseif cmd == 'ifrel'
                     if match(a:filepath, part1) == -1
-                        let path = ""
+                        "let path = ""
+                        paths = []
                     else
                         let path = a:filepath . s:os_slash . part2 .
                                      \ s:os_slash . a:filename . '.' . a:newextension
+                        call add(paths, path)
                     endif
                 elseif cmd == 'ifabs'
                     if match(a:filepath, part1) == -1
-                        let path = ""
+                        "let path = ""
+                        paths = []
                     else
                         let path = part2 . s:os_slash . a:filename . '.' . a:newextension
+                        call add(paths, path)
                     endif
                 endif
             endif
         endif
     elseif cmd == 'rel'
         let path = a:filepath . s:os_slash . directive . s:os_slash . a:filename . '.' . a:newextension
+        call add(paths, path)
     elseif cmd == 'abs'
         let path = directive . s:os_slash . a:filename . '.' . a:newextension
+        call add(paths, path)
     endif
 
-    return simplify(path)
+    let res_paths = []
+    for simply_path in paths
+        call add(res_paths, simplify(simply_path))
+    endfor
+    "return simplify(path)
+    return res_paths
 endfunction
 
 "
@@ -231,25 +270,33 @@ function! s:FSReturnCompanionFilename(filename, mustBeReadable)
     let filenameMutations = s:FSGetFilenameMutations()
     let locations = s:FSGetLocations()
     let mustmatch = s:FSGetMustMatch()
-    let newpath = ''
+    "let newpath = ''
+    let newpath = [] 
     for currentExt in extensions
         for loc in locations
             for filenameMutation in filenameMutations
                 let mutatedFilename = s:FSMutateFilename(justfile, filenameMutation)
                 let newpath = s:FSGetAlternateFilename(fullpath, mutatedFilename, currentExt, loc, mustmatch)
-                if a:mustBeReadable == 0 && newpath != ''
-                    return newpath
+                "if a:mustBeReadable == 0 && newpath != ''
+                if a:mustBeReadable == 0 && len(newpath) == 0 
+                    return '' 
                 elseif a:mustBeReadable == 1
-                    let newpath = glob(newpath)
-                    if filereadable(newpath)
-                        return newpath
-                    endif
+                    for pa in newpath
+                        let res_pa = glob(pa)
+                        if filereadable(res_pa)
+                            return res_pa  
+                        endif
+                    endfor
+                    "let newpath = glob(newpath)
+                    "if filereadable(newpath)
+                        "return newpath
+                    "endif
                 endif
             endfor
         endfor
     endfor
-
-    return newpath
+    "return newpath
+    return '' 
 endfunction
 
 "
