@@ -209,10 +209,11 @@ function! s:FSGetAlternateFilename(filepath, filename, newextension, location, m
                 if cmd == 'reg'
                     if a:mustmatch == 1 && match(a:filepath, part1) == -1
                         "let path = ""
-                        paths = []
+                        call add(paths, "")
                     else
-                        "let path = substitute(a:filepath, part1, part2, flags) . s:os_slash .
-                                    "\ a:filename . '.' . a:newextension
+                        let path = substitute(a:filepath, part1, part2, flags) . s:os_slash .
+                                    \ a:filename . '.' . a:newextension
+                        call add(paths, path) 
                         for raw_path in s:FSGetAlternateFilenameList(a:filepath, part1, part2)
                             call add(paths, raw_path . s:os_slash .
                                     \ a:filename . '.' . a:newextension)
@@ -221,7 +222,7 @@ function! s:FSGetAlternateFilename(filepath, filename, newextension, location, m
                 elseif cmd == 'ifrel'
                     if match(a:filepath, part1) == -1
                         "let path = ""
-                        paths = []
+                        call add(paths, "")
                     else
                         let path = a:filepath . s:os_slash . part2 .
                                      \ s:os_slash . a:filename . '.' . a:newextension
@@ -230,7 +231,7 @@ function! s:FSGetAlternateFilename(filepath, filename, newextension, location, m
                 elseif cmd == 'ifabs'
                     if match(a:filepath, part1) == -1
                         "let path = ""
-                        paths = []
+                        call add(paths, "")
                     else
                         let path = part2 . s:os_slash . a:filename . '.' . a:newextension
                         call add(paths, path)
