@@ -252,6 +252,36 @@ function! s:FSReturnCompanionFilename(filename, mustBeReadable)
     return newpath
 endfunction
 
+function! s:FSReturnCompanionFilenameList(filename, mustBeReadable)
+    let fullpath = s:FSGetFullPathToDirectory(a:filename)
+    let ext = s:FSGetFileExtension(a:filename)
+    let justfile = s:FSGetFileNameWithoutExtension(a:filename)
+    let extensions = s:FSGetExtensions()
+    let filenameMutations = s:FSGetFilenameMutations()
+    let locations = s:FSGetLocations()
+    let mustmatch = s:FSGetMustMatch()
+    let newpath = ''
+    let newpathList = []
+    for currentExt in extensions
+        for loc in locations
+            for filenameMutation in filenameMutations
+                let mutatedFilename = s:FSMutateFilename(justfile, filenameMutation)
+                let newpath = s:FSGetAlternateFilename(fullpath, mutatedFilename, currentExt, loc, mustmatch)
+                if a:mustBeReadable == 0 && newpath != ''
+                    call add(newpathList, newpath)
+                elseif a:mustBeReadable == 1
+                    let newpath = glob(newpath)
+                    if filereadable(newpath)
+                        call add(newpathList, newpath)
+                    endif
+                endif
+            endfor
+        endfor
+    endfor
+
+    return newpathList
+endfunction
+
 "
 " FSReturnReadableCompanionFilename
 "
@@ -291,24 +321,30 @@ function! FSwitch(filename, precmd)
     let newpath = FSReturnReadableCompanionFilename(a:filename)
     let openfile = 1
     if !filereadable(newpath)
+        if newpath == ''
+            let newpath = FSReturnCompanionFilenameString(a:filename)
+        endif
         if exists("b:fsnonewfiles") || exists("g:fsnonewfiles")
             let openfile = 0
-        else
-            let newpath = FSReturnCompanionFilenameString(a:filename)
         endif
     endif
     if &switchbuf =~ "^use"
-        let i = 1
-        let bufnum = winbufnr(i)
-        while bufnum != -1
-            let filename = fnamemodify(bufname(bufnum), ':p')
-            if filename == newpath
-                execute ":sbuffer " .  filename
-                return
-            endif
-            let i += 1
-            let bufnum = winbufnr(i)
-        endwhile
+        let newpathList = s:FSReturnCompanionFilenameList(a:filename, 0)
+        for np in newpathList
+            let exceptfilename = fnamemodify(np, ':t')
+            let i = 1
+            let bufnum = bufnr(i)
+            while bufnum != -1
+                let filename = fnamemodify(bufname(bufnum), ':p')
+                let justfile = fnamemodify(filename, ':t')
+                if justfile == exceptfilename
+                    execute ":buffer " .  filename
+                    return
+                endif
+                let i += 1
+                let bufnum = bufnr(i)
+            endwhile
+        endfor
     endif
     if openfile == 1
         if newpath != ''
