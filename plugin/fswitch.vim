@@ -304,6 +304,19 @@ function! FSReturnCompanionFilenameString(filename)
     return s:FSReturnCompanionFilename(a:filename, 0)
 endfunction
 
+function! s:GetBufferList()
+    redir => bufoutput
+    buffers
+    redir END
+    let bufoutput = split(bufoutput, '\n')
+    let bufnames = []
+    for bufn in bufoutput
+        let bits = split(bufn, '"')
+        call add(bufnames, fnamemodify(bufname(str2nr(bits[0])), ':p'))
+    endfor
+    return bufnames
+endfunction
+
 "
 " FSwitch
 "
@@ -330,20 +343,16 @@ function! FSwitch(filename, precmd)
     endif
     if &switchbuf =~ "^use"
         let newpathList = s:FSReturnCompanionFilenameList(a:filename, 0)
+        silent let bufnames = s:GetBufferList()
         for np in newpathList
             let exceptfilename = fnamemodify(np, ':t')
-            let i = 1
-            let bufnum = bufnr(i)
-            while bufnum != -1
-                let filename = fnamemodify(bufname(bufnum), ':p')
+            for filename in bufnames
                 let justfile = fnamemodify(filename, ':t')
                 if justfile == exceptfilename
                     execute ":buffer " .  filename
                     return
                 endif
-                let i += 1
-                let bufnum = bufnr(i)
-            endwhile
+            endfor
         endfor
     endif
     if openfile == 1
