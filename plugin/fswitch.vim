@@ -341,7 +341,7 @@ function! FSwitch(filename, precmd)
             let openfile = 0
         endif
     endif
-    if &switchbuf =~ "^use"
+    if exists("b:fsfindinbuffers") || exists("g:fsfindinbuffers")
         let newpathList = s:FSReturnCompanionFilenameList(a:filename, 0)
         silent let bufnames = s:GetBufferList()
         for np in newpathList
