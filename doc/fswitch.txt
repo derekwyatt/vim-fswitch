@@ -242,6 +242,13 @@ get that move on to |fswitch-configure|.
 	choose to do this on a per-extension basis or globally.  Set the
 	global one to shut it off all the time and use the buffer version to
 	shut it off locally.
+							*'fsfindinbuffers'*
+'fsfindinbuffers'
+		string	(default off)
+		local to buffer and global
+	
+	This variable is both global and local.  If you want to find a matched
+    file in buffers, you can set this value.
 
 							*'fsneednomatch'*
 'fsneednomatch'
