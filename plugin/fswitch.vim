@@ -19,8 +19,14 @@ if exists("g:disable_fswitch")
     finish
 endif
 
+function! s:FSError(msg) abort
+    echohl ErrorMsg
+    echomsg a:msg
+    echohl None
+endfunction
+
 if v:version < 700
-  echoerr "FSwitch requires Vim 7.0 or higher."
+  call s:FSError("FSwitch requires Vim 7.0 or higher.")
   finish
 endif
 
@@ -323,10 +329,10 @@ function! FSwitch(filename, precmd)
                 execute 'edit ' . s:fname
             endif
         else
-            echoerr "Alternate has evaluated to nothing.  See :h fswitch-empty for more info."
+            call s:FSError("Alternate has evaluated to nothing.  See :h fswitch-empty for more info.")
         endif
     else
-        echoerr "No alternate file found.  'fsnonewfiles' is set which denies creation."
+        call s:FSError("No alternate file found.")
     endif
 endfunction
 
